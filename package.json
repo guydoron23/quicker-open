@@ -3,6 +3,10 @@
   "displayName": "Quicker",
   "description": "Quickly open files by their initials",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guydoron23/quicker-open.git"
+  },
   "engines": {
     "vscode": "^1.81.0"
   },
@@ -54,7 +58,8 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "gitflow": "node scripts/gitflow.js"
   },
   "devDependencies": {
     "@types/vscode": "^1.81.0",
