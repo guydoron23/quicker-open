@@ -1,6 +1,6 @@
 {
-  "name": "quickpick",
-  "displayName": "QuickPick",
+  "name": "quickeropen",
+  "displayName": "Quicker",
   "description": "Quickly open files by their initials",
   "version": "0.0.1",
   "engines": {
@@ -14,13 +14,13 @@
   "contributes": {
     "commands": [
       {
-        "command": "quickpick.camelCaseQuickOpen",
-        "title": "OpenFileInitials"
+        "command": "quickeropen.quickOpenInitials",
+        "title": "Open file by initials"
       }
     ],
     "keybindings": [
       {
-        "command": "quickpick.camelCaseQuickOpen",
+        "command": "quickeropen.quickOpenInitials",
         "key": "ctrl+alt+p",
         "mac": "cmd+alt+p"
       }
@@ -28,14 +28,14 @@
     "configuration": {
       "title": "My Extension",
       "properties": {
-        "quickpick.includePath": {
+        "quickeropen.includePath": {
           "type": "string[]",
           "default": [
             "**/src/**"
           ],
           "description": "Paths to include when searching for files."
         },
-        "quickpick.excludePath": {
+        "quickeropen.excludePath": {
           "type": "string[]",
           "default": [
             "**/node_modules/**"

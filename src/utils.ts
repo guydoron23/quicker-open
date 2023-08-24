@@ -2,31 +2,15 @@ import * as vscode from "vscode";
 import { Uri } from "vscode";
 import { Dict, filesKey, isNone } from "./types";
 
-export function matchCamelCase(file: vscode.Uri, query: string) {
-  const fileName = getFileName(file);
-  const valueParts = fileName.split(/(?=[A-Z])/);
-  const queryParts = query.toLowerCase().split(/(?=[a-z])/);
-
-  let valueIndex = 0;
-  let queryIndex = 0;
-
-  while (valueIndex < valueParts.length && queryIndex < queryParts.length) {
-    const filePart = valueParts[valueIndex].toLocaleLowerCase();
-    const filterPart = queryParts[queryIndex];
-    if (filePart.startsWith(filterPart)) {
-      valueIndex++;
-      queryIndex++;
-    } else {
-      return false;
-    }
-  }
-
-  return queryIndex === queryParts.length;
-}
-
 export const getFileName = (file: vscode.Uri) =>
   vscode.workspace.asRelativePath(file).split(/[/\\]/).pop() || "";
 
+/**
+ * Searches the loaded file tree by navigating the tree nodes with the given letters in input
+ * @param tree The files tree to look in
+ * @param input the initials to search the tree with
+ * @returns array of files matching the input
+ */
 export const getMatchingFiles = (tree: Dict, input: string): Uri[] => {
   const [char, rest] = extractFirst(input);
   if (char === ".") {

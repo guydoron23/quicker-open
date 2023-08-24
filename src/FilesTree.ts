@@ -26,7 +26,7 @@ export class FilesTree {
 
       if (isNone(initials)) {
         window.showErrorMessage(
-          `QuickPick: Failed to parse file initials. path: ${file.path}`
+          `Quicker: Failed to parse file initials. path: ${file.path}`
         );
         return;
       }
@@ -54,7 +54,7 @@ export class FilesTree {
     this.isLoaded = true;
     this.tempEventHandlerQueue.forEach((handler) => handler(this._files));
     this.tempEventHandlerQueue = [];
-    window.showInformationMessage("QuickPick finished loading files");
+    window.showInformationMessage("Quicker finished loading files");
     console.log("Finished loading files");
   };
 }

@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
-import { getFileName, getMatchingFiles, matchCamelCase } from "./utils";
+import { getFileName, getMatchingFiles } from "./utils";
 import { Uri } from "vscode";
 import { FilesTree } from "./FilesTree";
 import { isNone } from "./types";
@@ -15,8 +15,8 @@ type Pickable = {
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  console.log("Starting quickpick");
-  const config = vscode.workspace.getConfiguration("camelCaseQuickOpen");
+  console.log("Starting Quicker");
+  const config = vscode.workspace.getConfiguration("quickeropen");
   const includePaths = config.get<string[]>("paths", ["**/src/**"]);
   const excludePattern = config.get<string[]>("excludePath", [
     "**/node_modules/**",
@@ -28,7 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
     .then(filesTree.loadFiles);
 
   let disposable = vscode.commands.registerCommand(
-    "quickpick.camelCaseQuickOpen",
+    "quickeropen.quickOpenInitials",
     async () => {
       const quickPick = vscode.window.createQuickPick<Pickable>();
       quickPick.items = [];
@@ -39,13 +39,11 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         filesTree.doWhenLoaded((filesDict) => {
-          quickPick.items = getMatchingFiles(filesDict, input).map(
-            fileToPickItem
-          );
+          quickPick.items = getMatchingFiles(filesDict, input).map(toPickable);
           console.log(
-            `finished. items: ${quickPick.items.map((val) =>
-              JSON.stringify(val)
-            )}`
+            `finished. items: ${quickPick.items
+              .map((val) => val.label)
+              .join(", ")}`
           );
         });
       });
@@ -62,32 +60,12 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(disposable);
-
-  //-----------------------------------------------------------------------------------------------------------------
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "quickpick" is now active!');
-
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable2 = vscode.commands.registerCommand(
-    "quickpick.helloWorld",
-    () => {
-      // The code you place here will be executed every time your command is executed
-      // Display a message box to the user
-      vscode.window.showInformationMessage("Hello World from QuickPick!");
-    }
-  );
-
-  //context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
 
-const fileToPickItem = (file: Uri): Pickable => ({
-  //label: "a".repeat(index) + vscode.workspace.asRelativePath(file),
+const toPickable = (file: Uri): Pickable => ({
   label: getFileName(file),
   description: vscode.workspace.asRelativePath(file),
   uri: file,
